@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI Model Output Safety Review Environment
 
 > **Real-world environment for training AI agents to detect unsafe outputs, bias, and jailbreak attempts**
@@ -114,3 +115,12 @@ reward = (
 
 ## License
 MIT
+emoji: 🔥
+colorFrom: gray
+colorTo: pink
+sdk: docker
+pinned: false
+---
+
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+>>>>>>> 8d2318ae170419f587fecc2167e84a584734b4c4

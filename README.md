@@ -1,4 +1,14 @@
-<<<<<<< HEAD
+---
+title: AI Model Output Safety Review Environment
+emoji: 🔥
+colorFrom: gray
+colorTo: pink
+sdk: docker
+sdk_version: latest
+app_file: server.py
+pinned: false
+---
+
 # AI Model Output Safety Review Environment
 
 > **Real-world environment for training AI agents to detect unsafe outputs, bias, and jailbreak attempts**
@@ -115,9 +125,6 @@ reward = (
 
 ## License
 MIT
-emoji: 🔥
-colorFrom: gray
-colorTo: pink
 sdk: docker
 pinned: false
 ---

@@ -1,0 +1,58 @@
+AGENT PERFORMANCE REPORT
+1. Overview
+
+This report evaluates the performance of the trading agent using the Crystal Ball heuristic across three different market conditions:
+
+Easy Bull Market
+Medium Volatile Market
+Hard Flash Crash
+
+Initial Capital (for all scenarios): $10,000
+
+2. Easy Bull Market Performance
+
+The agent demonstrated consistent growth by actively reallocating capital between stocks, primarily focusing on MSFT and AAPL.
+
+Initial Value: $10,000
+Final Value: $10,647.22
+Strategy: Frequent switching between assets to capture upward trends
+Observation: Strong performance due to favorable market conditions
+
+Final Score: 1.0000
+
+3. Medium Volatile Market Performance
+
+In a fluctuating market, the agent dynamically adjusted positions across TSLA, MSFT, and AAPL.
+
+Initial Value: $10,000
+Final Value: $13,838.58
+Strategy: Active buying and selling based on short-term price movements
+Observation: High adaptability led to significant profit despite volatility
+
+Final Score: 1.0000
+
+4. Hard Flash Crash Performance
+
+During extreme market downturn conditions, the agent minimized risk by avoiding trades during peak instability.
+
+Initial Value: $10,000
+Final Value: $10,950.74
+Strategy:
+Early exit before crash intensifies
+No trading during high-risk phases
+Re-entry after market stabilization
+Observation: Effective risk management prevented major losses
+
+Final Score: 1.0000
+
+5. Overall Evaluation
+Average Score: 100.00%
+Key Strengths:
+Strong adaptability across market conditions
+Effective capital allocation
+Risk-aware behavior during crashes
+Key Insight:
+The agent performs optimally by combining aggressive growth strategies in stable markets with defensive strategies during high-risk periods.
+6. Conclusion
+
+The trading agent achieved excellent performance across all scenarios, maintaining profitability even under adverse conditions. The Crystal Ball heuristic proves to be a robust strategy for dynamic market environments.

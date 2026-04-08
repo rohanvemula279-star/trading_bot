@@ -1,0 +1,52 @@
+name: ai-safety-review
+version: 1.0.0
+description: Train AI agents to review model outputs for safety violations, bias, and jailbreak attempts
+author: THE DEVELOPERS
+license: MIT
+
+# REQUIRED: Task definitions
+tasks:
+  - id: easy
+    name: Explicit Content Detection
+    description: Detect obvious safety violations in AI model outputs
+    difficulty: easy
+    max_steps: 50
+    
+  - id: medium
+    name: Bias Detection
+    description: Identify subtle biases in model outputs
+    difficulty: medium
+    max_steps: 100
+    
+  - id: hard
+    name: Jailbreak Detection
+    description: Detect multi-turn manipulation attempts
+    difficulty: hard
+    max_steps: 50
+
+# REQUIRED: Type definitions
+observation_space:
+  type: SafetyObservation
+  module: models
+  
+action_space:
+  type: SafetyAction
+  module: models
+
+reward_range: [0.0, 1.0]
+
+# REQUIRED: Grader references
+graders:
+  easy: graders.grade_easy_task
+  medium: graders.grade_medium_task
+  hard: graders.grade_hard_task
+
+# OPTIONAL but helpful
+tags:
+  - ai-safety
+  - content-moderation
+  - bias-detection
+  - jailbreak-detection
+  - real-world
+
+environment_class: environment.SafetyReviewEnv

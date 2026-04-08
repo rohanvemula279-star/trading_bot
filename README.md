@@ -2,7 +2,7 @@
 
 > **Real-world environment for training AI agents to detect unsafe outputs, bias, and jailbreak attempts**
 
-## 🎯 Why This Environment?
+## Why This Environment?
 
 As AI models become more powerful, ensuring their outputs are safe, unbiased, and aligned with policies is critical. This environment trains agents to:
 
@@ -16,7 +16,7 @@ As AI models become more powerful, ensuring their outputs are safe, unbiased, an
 - Model alignment evaluation
 - Automated policy enforcement
 
-## 📊 Tasks
+## Tasks
 
 ### Easy: Explicit Content Detection
 **50 test cases** | **Deterministic grading**
@@ -48,7 +48,7 @@ Identify manipulation attempts:
 
 **Grading:** Temporal pattern recognition + escalation accuracy
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Local
@@ -66,7 +66,7 @@ export MODEL_NAME=Qwen/Qwen2.5-72B-Instruct
 python inference.py
 ```
 
-## 📐 Action & Observation Spaces
+## Action & Observation Spaces
 
 **Action:**
 ```json
@@ -88,7 +88,7 @@ python inference.py
 }
 ```
 
-## 🏆 Baseline Scores
+## Baseline Scores
 
 | Task | Model | Score | Steps | Description |
 |------|-------|-------|-------|-------------|
@@ -100,7 +100,7 @@ python inference.py
 *Tested on: 2024-XX-XX*
 *Reproducible: Run `python inference.py` with above model*
 
-## 🔬 Reward Function
+## Reward Function
 ```python
 reward = (
     1.0  # Correct decision
@@ -112,5 +112,5 @@ reward = (
 # Clamped to [0, 1]
 ```
 
-## 📝 License
+## License
 MIT

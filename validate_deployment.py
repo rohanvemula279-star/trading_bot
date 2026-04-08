@@ -10,8 +10,8 @@ Usage:
     python validate_deployment.py
 
 Exit codes:
-    0 = All checks passed ✅
-    1 = Some checks failed ❌
+    0 = All checks passed
+    1 = Some checks failed
 """
 
 import os
@@ -23,7 +23,7 @@ from typing import List, Tuple, Dict, Any
 try:
     import yaml
 except ImportError:
-    print("❌ PyYAML not found. Install it: pip install pyyaml")
+    print("FAIL: PyYAML not found. Install it: pip install pyyaml")
     sys.exit(1)
 
 
@@ -39,20 +39,20 @@ class ValidationReport:
     
     def print_report(self):
         print("\n" + "="*70)
-        print("🔍 OpenEnv Hackathon Pre-Deployment Validation Report")
+        print("[VALIDATION] OpenEnv Hackathon Pre-Deployment Validation Report")
         print("="*70)
         
         for section_name, (passed, messages) in self.sections.items():
-            status = "✅ PASS" if passed else "❌ FAIL"
+            status = "[PASS]" if passed else "[FAIL]"
             print(f"\n{status} | {section_name}")
             for msg in messages:
                 print(f"       {msg}")
         
         print("\n" + "="*70)
         if self.all_passed:
-            print("✅ ALL CHECKS PASSED - Ready for deployment!")
+            print("ALL CHECKS PASSED - Ready for deployment!")
         else:
-            print("❌ SOME CHECKS FAILED - Fix issues above before deploying")
+            print("SOME CHECKS FAILED - Fix issues above before deploying")
         print("="*70 + "\n")
         
         return 0 if self.all_passed else 1
@@ -145,7 +145,7 @@ def check_openenv_yaml() -> Tuple[bool, List[str]]:
             errors.append(f"graders must have: {required_graders}")
     
     if not errors:
-        errors.append("✓ All required fields present and valid")
+        errors.append("PASS All required fields present and valid")
         return True, errors
     return False, errors
 
@@ -168,14 +168,14 @@ def check_typed_models() -> Tuple[bool, List[str]]:
         required_classes = ["SafetyAction", "SafetyObservation", "SafetyState"]
         for cls_name in required_classes:
             if hasattr(models_module, cls_name):
-                errors.append(f"✓ {cls_name} defined")
+                errors.append(f"PASS {cls_name} defined")
             else:
                 errors.append(f"Missing class: {cls_name}")
     
     except Exception as e:
         return False, [f"Error loading models.py: {str(e)[:100]}"]
     
-    has_all = all("✓" in msg for msg in errors)
+    has_all = all("PASS" in msg for msg in errors)
     return has_all, errors
 
 
@@ -203,7 +203,7 @@ def check_graders_implementation() -> Tuple[bool, List[str]]:
             if hasattr(graders_module, func_name):
                 func = getattr(graders_module, func_name)
                 if callable(func):
-                    errors.append(f"✓ {func_name} is callable")
+                    errors.append(f"PASS {func_name} is callable")
                 else:
                     errors.append(f"{func_name} exists but is not callable")
             else:
@@ -212,7 +212,7 @@ def check_graders_implementation() -> Tuple[bool, List[str]]:
     except Exception as e:
         return False, [f"Error loading graders.py: {str(e)[:100]}"]
     
-    has_all = all("✓" in msg for msg in errors)
+    has_all = all("PASS" in msg for msg in errors)
     return has_all, errors
 
 
@@ -228,29 +228,29 @@ def check_dockerfile() -> Tuple[bool, List[str]]:
     
     # Check Python version
     if "python:3.1" in content:
-        errors.append("✓ Python 3.10+ base image")
+        errors.append("PASS Python 3.10+ base image")
     else:
-        errors.append("⚠ May not use Python 3.10+ (check FROM line)")
+        errors.append("WARN May not use Python 3.10+ (check FROM line)")
     
     # Check port
     if "7860" in content or "PORT" in content:
-        errors.append("✓ Port configuration present")
+        errors.append("PASS Port configuration present")
     else:
-        errors.append("⚠ Port 7860 not explicitly set (may fail on HF Spaces)")
+        errors.append("WARN Port 7860 not explicitly set (may fail on HF Spaces)")
     
     # Check requirements
     if "requirements.txt" in content:
-        errors.append("✓ requirements.txt copied")
+        errors.append("PASS requirements.txt copied")
     else:
-        errors.append("❌ requirements.txt not mentioned")
+        errors.append("FAIL requirements.txt not mentioned")
     
     # Check working directory
     if "WORKDIR" in content:
-        errors.append("✓ WORKDIR set")
+        errors.append("PASS WORKDIR set")
     else:
-        errors.append("⚠ No WORKDIR set")
+        errors.append("WARN No WORKDIR set")
     
-    has_critical = not any("❌" in e for e in errors)
+    has_critical = not any("FAIL" in e for e in errors)
     return has_critical, errors
 
 
@@ -273,9 +273,9 @@ def check_inference_script() -> Tuple[bool, List[str]]:
     
     for token, desc in format_checks:
         if token.split("(")[1] in content:
-            errors.append(f"✓ {desc} present")
+            errors.append(f"PASS {desc} present")
         else:
-            errors.append(f"❌ Missing {desc}")
+            errors.append(f"FAIL Missing {desc}")
     
     # Check environment variables
     env_checks = [
@@ -287,11 +287,11 @@ def check_inference_script() -> Tuple[bool, List[str]]:
     
     for pattern, desc in env_checks:
         if pattern in content:
-            errors.append(f"✓ {desc}")
+            errors.append(f"PASS {desc}")
         else:
-            errors.append(f"⚠ {desc} not found")
+            errors.append(f"WARN {desc} not found")
     
-    has_critical = all("❌" not in e for e in errors)
+    has_critical = all("FAIL" not in e for e in errors)
     return has_critical, errors
 
 
@@ -316,9 +316,9 @@ def check_readme() -> Tuple[bool, List[str]]:
     
     for keyword, desc in sections:
         if keyword in content:
-            errors.append(f"✓ {desc}")
+            errors.append(f"PASS {desc}")
         else:
-            errors.append(f"⚠ {desc} may be missing")
+            errors.append(f"WARN {desc} may be missing")
     
     return True, errors
 
@@ -334,22 +334,22 @@ def check_requirements_files() -> Tuple[bool, List[str]]:
         root_reqs = f.read()
     
     if "openenv" in root_reqs.lower():
-        errors.append("✓ openenv-core in root requirements.txt")
+        errors.append("PASS openenv-core in root requirements.txt")
     else:
-        errors.append("⚠ openenv-core may be missing from root requirements.txt")
+        errors.append("WARN openenv-core may be missing from root requirements.txt")
     
     if Path("server/requirements.txt").exists():
         with open("server/requirements.txt", encoding="utf-8") as f:
             server_reqs = f.read()
         
         if "openenv" in server_reqs.lower():
-            errors.append("✓ openenv-core in server/requirements.txt")
+            errors.append("PASS openenv-core in server/requirements.txt")
         elif "fastapi" in server_reqs.lower():
-            errors.append("✓ server/requirements.txt exists with dependencies")
+            errors.append("PASS server/requirements.txt exists with dependencies")
         else:
-            errors.append("⚠ server/requirements.txt may be incomplete")
+            errors.append("WARN server/requirements.txt may be incomplete")
     else:
-        errors.append("⚠ server/requirements.txt not found")
+        errors.append("WARN server/requirements.txt not found")
     
     return True, errors
 
@@ -365,20 +365,20 @@ def check_environment_structure() -> Tuple[bool, List[str]]:
     
     for dir_name, desc in required_dirs:
         if Path(dir_name).exists():
-            errors.append(f"✓ {desc} present")
+            errors.append(f"PASS {desc} present")
         else:
             if "optional" in desc.lower():
-                errors.append(f"⚠ {desc} not present (optional)")
+                errors.append(f"WARN {desc} not present (optional)")
             else:
-                errors.append(f"❌ {desc} missing")
+                errors.append(f"FAIL {desc} missing")
     
     # Check server files
     server_files = ["app.py", "requirements.txt"]
     for file in server_files:
         if Path(f"server/{file}").exists():
-            errors.append(f"✓ server/{file} present")
+            errors.append(f"PASS server/{file} present")
         else:
-            errors.append(f"⚠ server/{file} may be missing")
+            errors.append(f"WARN server/{file} may be missing")
     
     return True, errors
 
@@ -387,45 +387,45 @@ def main():
     report = ValidationReport()
     
     # Run all checks
-    print("\n🔄 Running validation checks...\n")
+    print("\n[*] Running validation checks...\n")
     
     report.add_section(
-        "1️⃣  OpenEnv YAML (openenv.yaml)",
+        "[1] OpenEnv YAML (openenv.yaml)",
         *check_openenv_yaml()
     )
     
     report.add_section(
-        "2️⃣  Typed Models (models.py)",
+        "[2] Typed Models (models.py)",
         *check_typed_models()
     )
     
     report.add_section(
-        "3️⃣  Graders (graders.py)",
+        "[3] Graders (graders.py)",
         *check_graders_implementation()
     )
     
     report.add_section(
-        "4️⃣  Dockerfile",
+        "[4] Dockerfile",
         *check_dockerfile()
     )
     
     report.add_section(
-        "5️⃣  Inference Script (inference.py)",
+        "[5] Inference Script (inference.py)",
         *check_inference_script()
     )
     
     report.add_section(
-        "6️⃣  README Documentation",
+        "[6] README Documentation",
         *check_readme()
     )
     
     report.add_section(
-        "7️⃣  Requirements Files",
+        "[7] Requirements Files",
         *check_requirements_files()
     )
     
     report.add_section(
-        "8️⃣  Directory Structure",
+        "[8] Directory Structure",
         *check_environment_structure()
     )
     

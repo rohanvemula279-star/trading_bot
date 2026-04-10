@@ -19,8 +19,17 @@ dependencies = [
 ]
 
 [project.scripts]
-server = "server.app:app"
+server = "server.app:main"
+
+[tool.setuptools]
+py-modules = ["environment", "models", "graders"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["server", "server.*"]
+include = ["server", "server.*", "src", "src.*", "scripts", "scripts.*"]
+
+[tool.setuptools.package-data]
+"*" = ["src/test_data/*.json"]
+
+[tool.pyright]
+extraPaths = ["."]

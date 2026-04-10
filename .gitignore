@@ -11,3 +11,5 @@ venv/
 run*.log
 .pytest_cache/
 .mypy_cache/
+
+*.egg-info/

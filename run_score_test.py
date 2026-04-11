@@ -18,9 +18,9 @@ from openai import OpenAI
 from models import SafetyAction
 
 # Re-read env vars after dotenv
-API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
+API_BASE_URL = os.environ["API_BASE_URL"]
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
-API_KEY = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
+API_KEY = os.environ["API_KEY"]
 TEMPERATURE = 0.3
 MAX_TOKENS = 300
 

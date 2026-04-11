@@ -25,7 +25,9 @@ def llm_call(messages: list) -> str:
     # ── Option A: OpenAI ──
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        api_base = os.environ["API_BASE_URL"]
+        api_key = os.environ["API_KEY"]
+        client = OpenAI(base_url=api_base, api_key=api_key)
         response = client.chat.completions.create(
             model=os.getenv("MODEL", "gpt-4o"),
             messages=messages,

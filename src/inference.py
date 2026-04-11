@@ -32,10 +32,10 @@ if load_dotenv is not None:
     load_dotenv(Path(__file__).parent.parent / ".env", override=False)
 
 # Environment variables (MANDATORY - injected by evaluator)
-API_BASE_URL = os.getenv("API_BASE_URL") or os.getenv("OPENAI_API_BASE")
+API_BASE_URL = os.environ["API_BASE_URL"]
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")  # Fallback only if not provided
 HF_TOKEN = os.getenv("HF_TOKEN")
-API_KEY = os.getenv("API_KEY") or os.getenv("OPENAI_API_KEY") or HF_TOKEN  # Use API_KEY first, fallback to OPENAI_API_KEY, HF_TOKEN
+API_KEY = os.environ["API_KEY"]
 LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 
 # Task configuration
@@ -251,10 +251,6 @@ async def main() -> None:
     print(f"[DEBUG] Using API_BASE_URL: {API_BASE_URL}", flush=True)
     print(f"[DEBUG] Using MODEL_NAME: {MODEL_NAME}", flush=True)
     print(f"[DEBUG] API_KEY is set: {bool(API_KEY)}", flush=True)
-
-    # Ensure OpenAI proxy compatibility
-    os.environ.setdefault("OPENAI_API_BASE", API_BASE_URL)
-    os.environ.setdefault("OPENAI_API_KEY", API_KEY)
 
     # Initialize
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)

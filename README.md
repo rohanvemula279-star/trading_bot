@@ -1,3 +1,12 @@
+---
+title: AI Safety Review Environment
+emoji: 🛡️
+colorFrom: red
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # LLM Quant Trading Environment
 
 OpenEnv Hackathon environment for quant trading with LLMs.

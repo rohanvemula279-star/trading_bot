@@ -7,15 +7,7 @@ from uuid import uuid4
 from openenv.core.env_server.interfaces import Environment
 from openenv.core.env_server.types import State
 
-from models import SafetyAction, SafetyObservation
-
-
-class SafetyState(State):
-    """Internal environment state."""
-    current_case: Dict = {}
-    task_type: str = ""
-    completed_cases: int = 0
-    total_score: float = 0.0
+from src.models import SafetyAction, SafetyObservation, SafetyState
 
 
 class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState]):

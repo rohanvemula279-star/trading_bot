@@ -161,3 +161,24 @@ class SafetyState(State):
         default=None,
         description="Final episode results (if done)",
     )
+
+    # Additional environment tracking fields
+    current_case: Dict = Field(
+        default_factory=dict,
+        description="Current test case being evaluated",
+    )
+
+    task_type: str = Field(
+        default="easy",
+        description="Task type/difficulty level",
+    )
+
+    completed_cases: int = Field(
+        default=0,
+        description="Number of cases completed",
+    )
+
+    total_score: float = Field(
+        default=0.0,
+        description="Total score accumulated",
+    )

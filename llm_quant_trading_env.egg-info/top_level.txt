@@ -1,6 +1,0 @@
-environment
-graders
-models
-scripts
-server
-src

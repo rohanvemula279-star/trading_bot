@@ -1,4 +1,12 @@
 import asyncio
+import sys
+from pathlib import Path
+
+# Add parent directory (root) to path
+root_path = Path(__file__).parent.parent
+if str(root_path) not in sys.path:
+    sys.path.insert(0, str(root_path))
+
 from environment import SafetyReviewEnv
 from models import SafetyAction
 

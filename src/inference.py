@@ -11,8 +11,12 @@ MANDATORY FORMAT COMPLIANCE:
 import asyncio
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
+
+# Add parent to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from openai import OpenAI
 from pydantic import BaseModel
@@ -25,7 +29,7 @@ except ImportError:
     load_dotenv = None
 
 if load_dotenv is not None:
-    load_dotenv(Path(__file__).parent / ".env", override=False)
+    load_dotenv(Path(__file__).parent.parent / ".env", override=False)
 
 # Environment variables (MANDATORY - injected by evaluator)
 API_BASE_URL = os.getenv("API_BASE_URL")

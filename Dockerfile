@@ -12,4 +12,4 @@ ENV PORT=7860
 
 EXPOSE 7860
 
-CMD ["python", "server.py"]
+CMD ["python", "-m", "uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "7860"]

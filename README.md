@@ -1,3 +1,13 @@
+---
+title: AI Safety Review Environment
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_file: server/app.py
+pinned: false
+---
+
 # AI Safety Review Environment
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)

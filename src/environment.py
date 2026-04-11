@@ -30,7 +30,11 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         self._test_cases = []
         self._current_case_idx = 0
         self._score = 0.0
-        self._state = SafetyState(episode_id=str(uuid4()))
+        self._state = SafetyState(
+            episode_id=str(uuid4()),
+            current_step=0,
+            total_steps=0
+        )
 
     def _load_test_cases(self, task: str) -> list:
         task_file_map = {
@@ -97,7 +101,8 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         # Initialize state
         self._state = SafetyState(
             episode_id=eid,
-            step_count=0,
+            current_step=0,
+            total_steps=len(self._test_cases),
             current_case=self._test_cases[0] if self._test_cases else {},
             task_type=self.task,
             completed_cases=0,
@@ -116,7 +121,8 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         if not self._state.current_case:
             raise RuntimeError("Environment not initialized. Call reset() first.")
             
-        self._state.step_count += 1
+        self._state.current_step += 1
+        self._state.total_steps += 1
         
         # Get ground truth
         ground_truth = self._state.current_case.get("ground_truth", {})
@@ -156,7 +162,7 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
             policy_guidelines=self.policy_guidelines,
             task_type=taskType,
             case_id=case.get("id", "unknown"),
-            step_number=self._state.step_count + 1,
+            step_number=self._state.current_step + 1,
             max_steps=len(self._test_cases),
             user_profile=case.get("user_profile"),
             done=done,

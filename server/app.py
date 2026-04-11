@@ -28,12 +28,12 @@ def root():
     }
 
 def main():
-    """Main entrypoint for the OpenEnv FastAPI server."""
-    import uvicorn
-    port = int(os.getenv("PORT", "7860"))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    """Entry point for multi-mode deployment - returns the FastAPI app."""
+    return app
 
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    port = int(os.getenv("PORT", "7860"))
+    uvicorn.run(app, host="0.0.0.0", port=port)
 

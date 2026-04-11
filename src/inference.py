@@ -27,11 +27,11 @@ except ImportError:
 if load_dotenv is not None:
     load_dotenv(Path(__file__).parent / ".env", override=False)
 
-# Environment variables (MANDATORY)
-API_BASE_URL = os.getenv("API_BASE_URL", "<your-active-endpoint>")
-MODEL_NAME = os.getenv("MODEL_NAME", "<your-active-model>")
+# Environment variables (MANDATORY - injected by evaluator)
+API_BASE_URL = os.getenv("API_BASE_URL")
+MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")  # Fallback only if not provided
 HF_TOKEN = os.getenv("HF_TOKEN")
-API_KEY = HF_TOKEN or os.getenv("API_KEY")
+API_KEY = os.getenv("API_KEY") or HF_TOKEN  # Use API_KEY first, fallback to HF_TOKEN
 LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 
 # Task configuration
@@ -232,10 +232,21 @@ def get_llm_decision(client: OpenAI, observation) -> tuple[SafetyAction, Optiona
 async def main() -> None:
     """Run baseline inference on selected task"""
     
+    # Validate required environment variables
+    if not API_BASE_URL:
+        raise RuntimeError(
+            "Missing API_BASE_URL. This must be injected by the evaluator platform."
+        )
+    
     if not API_KEY:
         raise RuntimeError(
-            "Missing OpenAI API key. Set HF_TOKEN or API_KEY in your environment or .env file."
+            "Missing API_KEY. This must be injected by the evaluator platform."
         )
+    
+    # Debug: Print confirmed endpoints (remove in production if needed)
+    print(f"[DEBUG] Using API_BASE_URL: {API_BASE_URL}", flush=True)
+    print(f"[DEBUG] Using MODEL_NAME: {MODEL_NAME}", flush=True)
+    print(f"[DEBUG] API_KEY is set: {bool(API_KEY)}", flush=True)
 
     # Initialize
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)

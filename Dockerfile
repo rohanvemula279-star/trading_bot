@@ -7,10 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Set default environment variables
+# Environment variables will be injected by the evaluator
 ENV PORT=7860
-ENV API_BASE_URL="https://router.huggingface.co/v1"
-ENV MODEL_NAME="Qwen/Qwen2.5-72B-Instruct"
 
 EXPOSE 7860
 

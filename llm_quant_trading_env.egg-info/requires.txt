@@ -1,9 +1,8 @@
-openenv-core[core]>=0.2.2
-fastapi
-uvicorn
-pydantic
-openai
-
-[dev]
-pytest>=8.0.0
-pytest-cov>=4.0.0
+openenv-core==0.2.3
+fastapi==0.115.2
+uvicorn[standard]==0.44.0
+pydantic<3.0,>=2.0
+openai==2.30.0
+python-dotenv==1.2.2
+python-multipart==0.0.24
+gradio>=4.0

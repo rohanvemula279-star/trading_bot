@@ -266,13 +266,13 @@ def check_inference_script() -> Tuple[bool, List[str]]:
     
     # Check format tokens (CRITICAL)
     format_checks = [
-        ("([START]", "[START] format token"),
-        ("([STEP]", "[STEP] format token"),
-        ("([END]", "[END] format token"),
+        ("[START]", "[START] format token"),
+        ("[STEP]", "[STEP] format token"),
+        ("[END]", "[END] format token"),
     ]
     
     for token, desc in format_checks:
-        if token.split("(")[1] in content:
+        if token in content:
             errors.append(f"PASS {desc} present")
         else:
             errors.append(f"FAIL Missing {desc}")

@@ -1,12 +1,12 @@
-# AI Safety Review Environment
+# LLM Quant Trading Environment
 
-OpenEnv Hackathon environment for safety review.
+OpenEnv Hackathon environment for quant trading with LLMs.
 
 ## Tasks
-The environment includes three safety review tasks:
-- `easy`: Explicit content detection
-- `medium`: Bias detection
-- `hard`: Jailbreak detection
+The environment includes three trading tasks:
+- `easy`: Basic trading signals
+- `medium`: Multi-asset portfolio management
+- `hard`: Risk-adjusted trading strategies
 
 ## Entry points
 - `inference.py`: Baseline inference script using OpenAI API.

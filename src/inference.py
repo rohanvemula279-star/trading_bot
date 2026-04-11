@@ -31,12 +31,25 @@ except ImportError:
 if load_dotenv is not None:
     load_dotenv(Path(__file__).parent.parent / ".env", override=False)
 
+# Debug: confirm injected environment variables before using them
+print("=== LLM Proxy Debug ===", file=sys.stderr, flush=True)
+print(f"API_BASE_URL exists: {'API_BASE_URL' in os.environ}", file=sys.stderr, flush=True)
+print(f"API_KEY exists: {'API_KEY' in os.environ}", file=sys.stderr, flush=True)
+if 'API_BASE_URL' in os.environ:
+    print(f"URL value: {os.environ['API_BASE_URL'][:30]}...", file=sys.stderr, flush=True)
+
 # Environment variables (MANDATORY - injected by evaluator)
-API_BASE_URL = os.environ["API_BASE_URL"]
+API_BASE_URL = os.getenv("API_BASE_URL")
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")  # Fallback only if not provided
 HF_TOKEN = os.getenv("HF_TOKEN")
-API_KEY = os.environ["API_KEY"]
+API_KEY = os.getenv("API_KEY")
 LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
+
+if not API_BASE_URL or not API_KEY:
+    print("ERROR: API_BASE_URL or API_KEY not injected!", file=sys.stderr, flush=True)
+    print(f"API_BASE_URL present: {API_BASE_URL is not None}", file=sys.stderr, flush=True)
+    print(f"API_KEY present: {API_KEY is not None}", file=sys.stderr, flush=True)
+    sys.exit(1)
 
 # Task configuration
 TASK_NAME = os.getenv("SAFETY_TASK", "easy")
@@ -188,6 +201,7 @@ def get_llm_decision(client: OpenAI, observation) -> tuple[SafetyAction, Optiona
     try:
         prompt = build_safety_prompt(observation)
 
+        print("=== LLM call start ===", file=sys.stderr, flush=True)
         completion = client.chat.completions.create(
             model=MODEL_NAME,
             messages=[
@@ -208,6 +222,7 @@ def get_llm_decision(client: OpenAI, observation) -> tuple[SafetyAction, Optiona
             },
         )
 
+        print("=== LLM call completed ===", file=sys.stderr, flush=True)
         response_text = completion.choices[0].message.content
         if response_text is None:
             return (
@@ -251,9 +266,14 @@ async def main() -> None:
     print(f"[DEBUG] Using API_BASE_URL: {API_BASE_URL}", flush=True)
     print(f"[DEBUG] Using MODEL_NAME: {MODEL_NAME}", flush=True)
     print(f"[DEBUG] API_KEY is set: {bool(API_KEY)}", flush=True)
+    print("=== LLM Proxy Debug ===", file=sys.stderr, flush=True)
+    print(f"API_BASE_URL: {API_BASE_URL or 'MISSING'}", file=sys.stderr, flush=True)
+    print(f"API_KEY: {'PRESENT' if API_KEY else 'MISSING'}", file=sys.stderr, flush=True)
+    print(f"OpenAI client class: {OpenAI.__module__}.{OpenAI.__name__}", file=sys.stderr, flush=True)
 
     # Initialize
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+    print(f"Client base_url: {getattr(client, 'base_url', 'UNKNOWN')}", file=sys.stderr, flush=True)
     env = SafetyReviewEnv(task=TASK_NAME)
     
     rewards: List[float] = []

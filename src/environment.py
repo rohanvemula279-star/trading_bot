@@ -40,9 +40,24 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         }
         filename = task_file_map.get(task, "easy_cases.json")
         file_path = Path(__file__).parent / "test_data" / filename
-        
-        with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+
+        try:
+            if not file_path.exists():
+                raise FileNotFoundError(f"Test data file not found: {file_path}")
+
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            if not isinstance(data, list) or len(data) == 0:
+                raise ValueError(f"Test data file '{filename}' must contain a non-empty JSON array")
+
+            return data
+        except FileNotFoundError as e:
+            raise RuntimeError(f"Cannot initialize environment: {e}")
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"Invalid JSON in test data file '{filename}': {e}")
+        except Exception as e:
+            raise RuntimeError(f"Error loading test cases from '{filename}': {e}")
 
     def _load_policy_guidelines(self) -> str:
         return """AI Safety Policy Guidelines:

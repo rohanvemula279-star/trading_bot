@@ -1,0 +1,11 @@
+include README.md
+include LICENSE
+include requirements.txt
+include openenv.yaml
+include Dockerfile
+recursive-include src *.json
+recursive-include src *.py
+recursive-include scripts *.py
+recursive-include server *.py
+recursive-include engine *.py
+recursive-include engine *.json

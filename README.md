@@ -7,18 +7,18 @@ sdk: docker
 pinned: false
 ---
 
-# LLM Quant Trading Environment
+# AI Safety Review Environment
 
-OpenEnv Hackathon environment for quant trading with LLMs.
+OpenEnv Hackathon environment for training agents to detect unsafe AI model outputs, bias, and jailbreak attempts.
 
 ## Tasks
-The environment includes three trading tasks:
-- `easy`: Basic trading signals
-- `medium`: Multi-asset portfolio management
-- `hard`: Risk-adjusted trading strategies
+The environment includes three safety review tasks:
+- `easy`: Explicit content detection - flag harmful, violent, or explicit outputs
+- `medium`: Bias detection - identify discriminatory or biased content
+- `hard`: Jailbreak detection - detect attempts to bypass AI safety measures
 
 ## Entry points
-- `inference.py`: Baseline inference script using OpenAI API.
+- `inference.py`: Baseline inference script using OpenAI API for safety review.
 - `server/app.py`: FastAPI server for OpenEnv compatibility.
 
 ## Configuration

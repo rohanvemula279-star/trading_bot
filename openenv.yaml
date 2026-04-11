@@ -1,26 +1,26 @@
-name: llm-quant-trading-env
+name: ai-safety-review
 version: 1.0.0
-description: Train LLM agents for quantitative trading strategies
+description: AI Model Output Safety Review Environment - Flag unsafe AI outputs, bias, and jailbreak attempts
 author: THE DEVELOPERS
 license: MIT
 
 # REQUIRED: Task definitions
 tasks:
   - id: easy
-    name: Basic Trading Signals
-    description: Generate basic buy/sell signals based on market data
+    name: Explicit Content Detection
+    description: Detect harmful, violent, or explicit AI model outputs
     difficulty: easy
     max_steps: 50
     
   - id: medium
-    name: Portfolio Management
-    description: Manage multi-asset portfolios with rebalancing
+    name: Bias Detection
+    description: Identify and flag biased or discriminatory content in AI outputs
     difficulty: medium
     max_steps: 100
     
   - id: hard
-    name: Risk-Adjusted Strategies
-    description: Implement sophisticated risk-adjusted trading strategies
+    name: Jailbreak Detection
+    description: Detect sophisticated attempts to bypass AI safety measures
     difficulty: hard
     max_steps: 50
 
@@ -43,11 +43,11 @@ graders:
 
 # OPTIONAL but helpful
 tags:
-  - quant-trading
-  - llm-agents
-  - financial-markets
-  - portfolio-management
-  - risk-management
-  - algorithmic-trading
+  - safety
+  - content-moderation
+  - bias-detection
+  - jailbreak-detection
+  - ai-safety
+  - agent-training
 
 environment_class: environment.SafetyReviewEnv

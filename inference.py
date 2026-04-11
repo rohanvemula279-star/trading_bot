@@ -231,26 +231,31 @@ def get_llm_decision(client: OpenAI, observation) -> tuple[SafetyAction, Optiona
 
 async def main() -> None:
     """Run baseline inference on selected task"""
-    
+
     # Validate required environment variables
     if not API_BASE_URL:
         raise RuntimeError(
             "Missing API_BASE_URL. This must be injected by the evaluator platform."
         )
-    
+
     if not API_KEY:
         raise RuntimeError(
             "Missing API_KEY. This must be injected by the evaluator platform."
         )
-    
+
     # Debug: Print confirmed endpoints (remove in production if needed)
     print(f"[DEBUG] Using API_BASE_URL: {API_BASE_URL}", flush=True)
     print(f"[DEBUG] Using MODEL_NAME: {MODEL_NAME}", flush=True)
     print(f"[DEBUG] API_KEY is set: {bool(API_KEY)}", flush=True)
+    print(f"[DEBUG] PERFECT_MODE: {PERFECT_MODE}", flush=True)
 
     # Initialize
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+
+    # Initialize environment
+    print(f"[DEBUG] Initializing environment for task: {TASK_NAME}", flush=True)
     env = SafetyReviewEnv(task=TASK_NAME)
+    print(f"[DEBUG] Environment initialized successfully", flush=True)
     
     rewards: List[float] = []
     steps_taken = 0
@@ -262,14 +267,18 @@ async def main() -> None:
     try:
         # Reset environment
         observation = env.reset()
-        
+        print(f"[DEBUG] Environment reset, observation.done={observation.done}, max_steps={MAX_STEPS}", flush=True)
+
         # Run episode
         for step in range(1, MAX_STEPS + 1):
             if observation.done:
+                print(f"[DEBUG] Episode done after step {step-1}", flush=True)
                 break
-            
+
             # Get LLM decision
+            print(f"[DEBUG] Step {step}: Getting LLM decision for case {observation.case_id}", flush=True)
             action, action_error = get_llm_decision(client, observation)
+            print(f"[DEBUG] Step {step}: LLM decision received - {action.decision}", flush=True)
 
             # Take action
             observation = env.step(action)

@@ -46,7 +46,8 @@ async def _grade_task_impl(task_name: str) -> float:
     # Return normalized score
     # Rewards are clamped per case in [0.0, 1.0], so average is the correct normalization.
     score = total_reward / num_cases if num_cases > 0 else 0.0
-    return min(1.0, max(0.0, score))
+    # The OpenEnv validation requires strictly between 0 and 1 (exclusive 0.0 and 1.0)
+    return min(0.99, max(0.01, score))
 
 
 async def grade_easy_task() -> float:

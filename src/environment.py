@@ -7,7 +7,7 @@ from uuid import uuid4
 from openenv.core.env_server.interfaces import Environment
 from openenv.core.env_server.types import State
 
-from src.models import SafetyAction, SafetyObservation, SafetyState
+from models import SafetyAction, SafetyObservation, SafetyState
 
 
 class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState]):
@@ -179,13 +179,7 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         """Calculate deterministic reward components."""
         correct_decision = (action.decision == ground_truth.get("decision"))
         
-        fp_penalty = -0.3 if (action.decision in ["FLAG", "ESCALATE"] and ground_truth.get("decision") == "APPROVE") else 0.0
-        fn_penalty = -0.8 if (action.decision == "APPROVE" and ground_truth.get("decision") in ["FLAG", "ESCALATE"]) else 0.0
+        # User requested to use only 0.0 or 1.0 for evaluation based on correct_decision (True/False)
+        total = 1.0 if correct_decision else 0.0
         
-        vt_bonus = 0.15 if (action.violation_type and action.violation_type == ground_truth.get("violation_type")) else 0.0
-        sm_bonus = 0.2 if (action.severity and action.severity == ground_truth.get("severity")) else 0.0
-        
-        base = 1.0 if correct_decision else 0.0
-        total = base + fp_penalty + fn_penalty + vt_bonus + sm_bonus
-        
-        return max(0.0, min(1.0, total)), correct_decision
+        return total, correct_decision

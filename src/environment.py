@@ -6,6 +6,10 @@ from uuid import uuid4
 
 from openenv.core.env_server.interfaces import Environment
 
+_REWARD_EPS = 1e-6
+_MIN_SCORE = 0.05
+_MAX_SCORE = 0.95
+
 from .models import SafetyAction, SafetyObservation, SafetyState
 
 
@@ -28,11 +32,12 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         # Initialize internal tracking fields (not part of State schema)
         self._test_cases = []
         self._current_case_idx = 0
-        self._score = 0.0
+        self._score = _MIN_SCORE
         self._state = SafetyState(
             episode_id=str(uuid4()),
             current_step=0,
-            total_steps=0
+            total_steps=0,
+            current_score=self._score,
         )
 
     def _load_test_cases(self, task: str) -> list:
@@ -95,7 +100,7 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         # Fresh test cases
         self._test_cases = list(self._all_test_cases)
         self._current_case_idx = 0
-        self._score = 0.0
+        self._score = _MIN_SCORE
         
         # Initialize state
         self._state = SafetyState(
@@ -105,10 +110,17 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
             current_case=self._test_cases[0] if self._test_cases else {},
             task_type=self.task,
             completed_cases=0,
-            total_score=0.0
+            total_score=0.0,
+            current_score=self._score,
+            decisions_made=0,
+            correct_decisions=0,
+            current_case_id=self._test_cases[0].get("id", "unknown") if self._test_cases else "",
+            task_difficulty=self.task,
+            is_episode_done=False,
+            episode_result=None,
         )
         
-        return self._build_observation(done=False, reward=0.0)
+        return self._build_observation(done=False, reward=_REWARD_EPS)
 
     def step(
         self,
@@ -132,10 +144,16 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         # Update metrics
         self._state.total_score += reward
         self._state.completed_cases += 1
-        self._score = min(0.95, max(0.05, self._state.total_score / self._state.completed_cases))
+        self._state.decisions_made += 1
+        self._state.correct_decisions += 1 if decision_correct else 0
+        self._score = self._clamp_score(self._state.total_score / self._state.completed_cases)
+        self._state.current_score = self._score
         
         # Check if done
         done = self._current_case_idx >= len(self._test_cases) - 1
+        self._state.is_episode_done = done
+        if done:
+            self._state.episode_result = {"score": self._score}
         
         if not done:
             self._current_case_idx += 1
@@ -147,6 +165,7 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         case = self._state.current_case
         taskType = case.get("task_type", self._infer_task_type())
         
+        reward = self._clamp_reward(reward)
         meta = {
             "cases_completed": self._state.completed_cases,
             "average_score": self._score
@@ -173,6 +192,14 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         if self.task == "easy": return "explicit_content"
         if self.task == "medium": return "bias_detection"
         return "jailbreak_detection"
+
+    def _clamp_score(self, value: float) -> float:
+        """Keep any exposed score strictly within (0,1)."""
+        return max(_MIN_SCORE, min(_MAX_SCORE, float(value)))
+
+    def _clamp_reward(self, value: float) -> float:
+        """Keep any emitted reward strictly within (0,1)."""
+        return max(_REWARD_EPS, min(1.0 - _REWARD_EPS, float(value)))
 
     def _calculate_reward(self, action: SafetyAction, ground_truth: Dict) -> tuple[float, bool]:
         """Calculate binary reward: 0.99 if correct, 0.01 if wrong. No partial marks."""

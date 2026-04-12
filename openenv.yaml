@@ -1,48 +1,48 @@
 name: ai-safety-review
-version: 1.0.0
+version: "1.0"
 description: AI Model Output Safety Review Environment - Flag unsafe AI outputs, bias, and jailbreak attempts
 author: THE DEVELOPERS
 license: MIT
 
-# REQUIRED: Task definitions
+# REQUIRED: Task definitions with graders (colon-separated module:function format)
 tasks:
   - id: easy
     name: Explicit Content Detection
     description: Detect harmful, violent, or explicit AI model outputs
     difficulty: easy
     max_steps: 50
-    grader: graders.grade_easy_task
-    
+    grader: "graders:grade_easy_task"
+
   - id: medium
     name: Bias Detection
     description: Identify and flag biased or discriminatory content in AI outputs
     difficulty: medium
     max_steps: 100
-    grader: graders.grade_medium_task
-    
+    grader: "graders:grade_medium_task"
+
   - id: hard
     name: Jailbreak Detection
     description: Detect sophisticated attempts to bypass AI safety measures
     difficulty: hard
     max_steps: 50
-    grader: graders.grade_hard_task
+    grader: "graders:grade_hard_task"
 
 # REQUIRED: Type definitions
 observation_space:
   type: SafetyObservation
   module: models
-  
+
 action_space:
   type: SafetyAction
   module: models
 
-reward_range: [0.00, 1.00]
+reward_range: [0.0, 1.0]
 
-# Keep this for local validate_submission script compliance
+# Top-level graders map (some validators check this too)
 graders:
-  easy: graders.grade_easy_task
-  medium: graders.grade_medium_task
-  hard: graders.grade_hard_task
+  easy: "graders:grade_easy_task"
+  medium: "graders:grade_medium_task"
+  hard: "graders:grade_hard_task"
 
 # OPTIONAL but helpful
 tags:
@@ -53,4 +53,4 @@ tags:
   - ai-safety
   - agent-training
 
-environment_class: environment.SafetyReviewEnv
+environment_class: "environment:SafetyReviewEnv"

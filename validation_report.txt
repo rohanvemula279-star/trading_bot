@@ -1,0 +1,14 @@
+AI Safety Review Environment - Validation Report
+======================================================================
+
+Passed: 53
+Failed: 0
+Warnings: 3
+
+
+WARNINGS:
+  - Dockerfile doesn't explicitly reference server.py
+  - Skipped Docker build test
+    Run manually before deploying
+  - Skipped inference test
+    Run manually with HF_TOKEN set

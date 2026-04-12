@@ -383,8 +383,8 @@ async def main() -> None:
         if rewards:
             # Average reward across all steps
             score = sum(rewards) / len(rewards)
-            # Clamp to STRICT (0, 1) — platform rejects 0.0 and 1.0
-            score = max(0.0001, min(0.9999, score))
+            # Clamp to STRICT (0, 1) — platform rejects 0.0 and 1.0 (using 0.05 and 0.95 for safety against rounding)
+            score = max(0.05, min(0.95, score))
         
         success = score >= SUCCESS_SCORE_THRESHOLD
     

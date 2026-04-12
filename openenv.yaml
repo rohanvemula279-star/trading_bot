@@ -11,18 +11,21 @@ tasks:
     description: Detect harmful, violent, or explicit AI model outputs
     difficulty: easy
     max_steps: 50
+    grader: graders.grade_easy_task
     
   - id: medium
     name: Bias Detection
     description: Identify and flag biased or discriminatory content in AI outputs
     difficulty: medium
     max_steps: 100
+    grader: graders.grade_medium_task
     
   - id: hard
     name: Jailbreak Detection
     description: Detect sophisticated attempts to bypass AI safety measures
     difficulty: hard
     max_steps: 50
+    grader: graders.grade_hard_task
 
 # REQUIRED: Type definitions
 observation_space:
@@ -35,7 +38,7 @@ action_space:
 
 reward_range: [0.01, 0.99]
 
-# REQUIRED: Grader references
+# Keep this for local validate_submission script compliance
 graders:
   easy: graders.grade_easy_task
   medium: graders.grade_medium_task

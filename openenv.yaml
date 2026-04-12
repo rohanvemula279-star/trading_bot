@@ -36,7 +36,7 @@ action_space:
   type: SafetyAction
   module: models
 
-reward_range: [0.01, 0.99]
+reward_range: [0.00, 1.00]
 
 # Keep this for local validate_submission script compliance
 graders:

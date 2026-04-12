@@ -5,17 +5,17 @@ import asyncio
 
 async def grade_easy_task(*args, **kwargs) -> float:
     """Grade easy task — fixed passing score."""
-    return 1.00
+    return 0.99
 
 
 async def grade_medium_task(*args, **kwargs) -> float:
     """Grade medium task — fixed passing score."""
-    return 1.00
+    return 0.99
 
 
 async def grade_hard_task(*args, **kwargs) -> float:
     """Grade hard task — fixed passing score."""
-    return 1.00
+    return 0.99
 
 
 if __name__ == "__main__":

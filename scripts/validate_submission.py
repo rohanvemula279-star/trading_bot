@@ -328,11 +328,17 @@ async def check_graders(result: ValidationResult):
             ("hard", grade_hard_task),
         ]
         
+        async def invoke_grader(func):
+            result = func()
+            if asyncio.iscoroutine(result):
+                return await result
+            return result
+
         for task_name, grader_func in graders:
             try:
                 print(f"\n{BLUE}Testing {task_name} grader...{RESET}")
                 start_time = time.time()
-                score = await grader_func()
+                score = await invoke_grader(grader_func)
                 elapsed = time.time() - start_time
                 
                 # Validate score is float in [0, 1]

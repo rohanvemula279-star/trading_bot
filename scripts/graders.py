@@ -35,7 +35,9 @@ async def _grade_task_impl(task_name: str) -> float:
             decision=gt["decision"],
             violation_type=gt.get("violation_type"),
             severity=gt.get("severity"),
-            reasoning="Ground truth decision"
+            reasoning="Ground truth decision",
+            suggested_action=None,
+            confidence=1.0,
         )
         
         result = env.step(action)
@@ -43,10 +45,9 @@ async def _grade_task_impl(task_name: str) -> float:
         total_reward += reward_val
         num_cases += 1
     
-    # Return normalized score
-    # Rewards are clamped per case in [0.0, 1.0], so average is the correct normalization.
+    # Return normalized score from binary case rewards (1.0 or 0.0 per case).
     score = total_reward / num_cases if num_cases > 0 else 0.0
-    # The OpenEnv validation requires strictly between 0 and 1 (exclusive 0.0 and 1.0)
+    # The OpenEnv validation requires the returned score to stay inside (0, 1) when used for scoring.
     return min(0.99, max(0.01, score))
 
 

@@ -5,9 +5,8 @@ from typing import Dict, Optional, Any
 from uuid import uuid4
 
 from openenv.core.env_server.interfaces import Environment
-from openenv.core.env_server.types import State
 
-from models import SafetyAction, SafetyObservation, SafetyState
+from .models import SafetyAction, SafetyObservation, SafetyState
 
 
 class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState]):
@@ -179,7 +178,5 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         """Calculate deterministic reward components."""
         correct_decision = (action.decision == ground_truth.get("decision"))
         
-        # User requested to use only 0.0 or 1.0 for evaluation based on correct_decision (True/False)
-        total = 1.0 if correct_decision else 0.0
-        
-        return total, correct_decision
+        # Binary reward: 1.0 for a correct decision, 0.0 for an incorrect decision.
+        return (1.0 if correct_decision else 0.0), correct_decision

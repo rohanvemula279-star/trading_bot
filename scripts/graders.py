@@ -7,8 +7,8 @@ root_path = Path(__file__).parent.parent
 if str(root_path) not in sys.path:
     sys.path.insert(0, str(root_path))
 
-from environment import SafetyReviewEnv
-from models import SafetyAction
+from src.environment import SafetyReviewEnv
+from src.models import SafetyAction
 
 async def _grade_task_impl(task_name: str) -> float:
     """

@@ -42,7 +42,7 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
             "hard": "hard_cases.json"
         }
         filename = task_file_map.get(task, "easy_cases.json")
-        file_path = Path(__file__).parent / "test_data" / filename
+        file_path = Path(__file__).parent.parent / "test_data" / filename
 
         try:
             if not file_path.exists():

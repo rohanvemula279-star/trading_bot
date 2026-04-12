@@ -35,3 +35,7 @@ src = ["test_data/*.json"]
 
 [tool.pyright]
 extraPaths = ["."]
+
+[[tool.pyright.executionEnvironments]]
+root = "."
+extraPaths = ["."]

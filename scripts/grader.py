@@ -82,7 +82,7 @@ def grade_performance(metrics: Dict) -> Dict:
 
     raw = (prof_score * 0.40 + alpha_score * 0.25 + wr_score * 0.15 +
            freq_score * 0.10 + risk_score * 0.10 + bonus)
-    final = min(1.0, max(0.0, raw))
+    final = min(0.99, max(0.01, raw))
 
     return {
         "score": round(final, 4),

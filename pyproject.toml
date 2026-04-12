@@ -34,8 +34,10 @@ include = ["server", "server.*", "src", "src.*", "scripts", "scripts.*"]
 src = ["test_data/*.json"]
 
 [tool.pyright]
-extraPaths = ["."]
+extraPaths = [".", "scripts"]
+venvPath = "."
+venv = ".venv"
 
 [[tool.pyright.executionEnvironments]]
 root = "."
-extraPaths = ["."]
+extraPaths = [".", "scripts"]

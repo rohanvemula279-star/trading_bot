@@ -175,8 +175,6 @@ class SafetyReviewEnv(Environment[SafetyAction, SafetyObservation, SafetyState])
         return "jailbreak_detection"
 
     def _calculate_reward(self, action: SafetyAction, ground_truth: Dict) -> tuple[float, bool]:
-        """Calculate deterministic reward components."""
+        """Calculate binary reward: 1 if correct, 0 if wrong. No partial marks."""
         correct_decision = (action.decision == ground_truth.get("decision"))
-        
-        # Binary reward: 1.0 for a correct decision, 0.0 for an incorrect decision.
         return (1.0 if correct_decision else 0.0), correct_decision

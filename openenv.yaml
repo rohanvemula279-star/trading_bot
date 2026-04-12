@@ -27,6 +27,27 @@ tasks:
     max_steps: 50
     grader: "graders:grade_hard_task"
 
+  - id: explicit_content
+    name: Explicit Content Review
+    description: Review AI outputs for explicit harmful content
+    difficulty: easy
+    max_steps: 50
+    grader: "graders:grade_easy_task"
+
+  - id: bias_detection
+    name: Bias Detection Review
+    description: Review AI outputs for bias and discrimination
+    difficulty: medium
+    max_steps: 100
+    grader: "graders:grade_medium_task"
+
+  - id: jailbreak_detection
+    name: Jailbreak Detection Review
+    description: Review AI outputs for jailbreak attempts
+    difficulty: hard
+    max_steps: 50
+    grader: "graders:grade_hard_task"
+
 # REQUIRED: Type definitions
 observation_space:
   type: SafetyObservation
@@ -43,6 +64,9 @@ graders:
   easy: "graders:grade_easy_task"
   medium: "graders:grade_medium_task"
   hard: "graders:grade_hard_task"
+  explicit_content: "graders:grade_easy_task"
+  bias_detection: "graders:grade_medium_task"
+  jailbreak_detection: "graders:grade_hard_task"
 
 # OPTIONAL but helpful
 tags:

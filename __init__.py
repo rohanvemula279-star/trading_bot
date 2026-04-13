@@ -10,7 +10,10 @@ if str(src_path) not in sys.path:
 
 from environment import SafetyReviewEnv
 from models import SafetyAction, SafetyObservation, SafetyState
-from graders import grade_easy_task, grade_medium_task, grade_hard_task
+from graders import (
+    grade_easy_task, grade_medium_task, grade_hard_task,
+    grade_spam_task, grade_toxicity_task, grade_pii_task
+)
 
 __all__ = [
     "SafetyReviewEnv",
@@ -20,4 +23,7 @@ __all__ = [
     "grade_easy_task",
     "grade_medium_task",
     "grade_hard_task",
+    "grade_spam_task",
+    "grade_toxicity_task",
+    "grade_pii_task",
 ]

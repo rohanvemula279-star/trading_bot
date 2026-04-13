@@ -27,6 +27,27 @@ tasks:
     max_steps: 50
     grader: "graders:grade_hard_task"
 
+  - id: spam
+    name: Spam Detection
+    description: Detect spam content in AI outputs
+    difficulty: easy
+    max_steps: 50
+    grader: "graders:grade_spam_task"
+
+  - id: toxicity
+    name: Toxicity Detection
+    description: Identify toxic behavior in AI outputs
+    difficulty: medium
+    max_steps: 100
+    grader: "graders:grade_toxicity_task"
+
+  - id: pii
+    name: PII Leakage Detection
+    description: Detect personally identifiable information leaks
+    difficulty: hard
+    max_steps: 50
+    grader: "graders:grade_pii_task"
+
 # REQUIRED: Type definitions
 observation_space:
   type: SafetyObservation
@@ -43,6 +64,9 @@ graders:
   easy: "graders:grade_easy_task"
   medium: "graders:grade_medium_task"
   hard: "graders:grade_hard_task"
+  spam: "graders:grade_spam_task"
+  toxicity: "graders:grade_toxicity_task"
+  pii: "graders:grade_pii_task"
 
 # OPTIONAL but helpful
 tags:
